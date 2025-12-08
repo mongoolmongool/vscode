@@ -1,0 +1,7 @@
+[
+{
+  "directory": "/home/hugee_pinee_tree/vscode/hello_makefile/build",
+  "command": "/usr/bin/g++   -g -o CMakeFiles/hello_makefile.dir/main.cpp.o -c /home/hugee_pinee_tree/vscode/hello_makefile/main.cpp",
+  "file": "/home/hugee_pinee_tree/vscode/hello_makefile/main.cpp"
+}
+]

@@ -1,0 +1,3 @@
+/home/hugee_pinee_tree/vscode/hello_makefile/build/CMakeFiles/hello_makefile.dir
+/home/hugee_pinee_tree/vscode/hello_makefile/build/CMakeFiles/edit_cache.dir
+/home/hugee_pinee_tree/vscode/hello_makefile/build/CMakeFiles/rebuild_cache.dir
