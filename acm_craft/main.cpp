@@ -2,10 +2,10 @@
 using namespace std;
 
 struct building{
-    vector<int> before;
-    priority_queue<int> max_td; // max_total_duration
-    bool pushed;
+    vector<int> after;
+    int accumulated_duration = 0;
     int duration;
+    int indegree = 0;
 };
 
 class ac{
@@ -38,13 +38,13 @@ void ac::receive_input(){
     for(int i = 0; i < N; i++){
         cin >> D;
         buildings[i].duration = D;
-        buildings[i].pushed = false;
     }
 
     int X, Y; // X means departure, Y means arrival
     for(int i = 0; i < K; i++){
         cin >> X >> Y;
-        buildings[Y-1].before.push_back(X);
+        buildings[X-1].after.push_back(Y);
+        buildings[Y-1].indegree++;
     }
 
     cin >> W;
@@ -58,30 +58,36 @@ void ac::main_solve(){
 }
 
 void ac::sub_solve(){
-    answer = 0;
-    buildings[W-1].max_td.push(0);
-    q.push(W);
-    buildings[W-1].pushed = true;
+    for(int i = 0; i < N; i++){
+        if((buildings + i)->indegree == 0){
+            q.push(i+1);
+        }
+    }
 
     while(true){
         if(q.empty()) break;
 
-        building* front = buildings + (q.front() - 1);
+        int front_building_number = q.front();
+        building* front = &buildings[front_building_number-1];
 
-        int total_duration = front->duration + front->max_td.top();
+        if(front_building_number == W){
+            answer = front->accumulated_duration + front->duration;
+            break;
+        }
 
-        if((front->before.empty()) && (answer < total_duration)) answer = total_duration;
+        building* current_after;
+        int after_building_number;
+        for(int i = 0; i < front->after.size(); i++){
+            after_building_number = front->after[i];
+            current_after = &buildings[after_building_number-1]; 
+            
+            int ad_candidate = front->accumulated_duration + front->duration;
+            // accumulated_duration candidate of current_after
+            if(ad_candidate > current_after->accumulated_duration) current_after->accumulated_duration = ad_candidate;
 
-        building* before_of_front;
-        for(auto it = front->before.begin(); it != front->before.end(); it++){
-            before_of_front = &(buildings[(*it)-1]);
-            before_of_front->max_td.push(total_duration);
+            current_after->indegree--;
 
-            // q.push(*it);
-            if(!before_of_front->pushed){
-                 q.push(*it);
-                 before_of_front->pushed = true;
-            }
+            if(current_after->indegree == 0) q.push(after_building_number);
         }
 
         q.pop();
